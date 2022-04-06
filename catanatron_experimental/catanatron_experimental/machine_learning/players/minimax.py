@@ -220,7 +220,7 @@ class AlphaBetaPlayer(Player):
         self,
         color,
         depth=ALPHABETA_DEFAULT_DEPTH,
-        prunning=False,
+        prunning=True,
         value_fn_builder_name=None,
         params=DEFAULT_WEIGHTS,
         epsilon=None,
