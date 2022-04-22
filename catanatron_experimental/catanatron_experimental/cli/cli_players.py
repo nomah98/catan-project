@@ -1,9 +1,12 @@
 from collections import namedtuple
+from catanatron.players.minimax2 import MinimaxPlayer
 
 from rich.table import Table
 
 from catanatron.models.player import RandomPlayer
 from catanatron.players.weighted_random import WeightedRandomPlayer
+from catanatron.players.minimax2 import MinimaxPlayer
+
 
 # from catanatron_experimental.mcts_score_collector import (
 #     MCTSScoreCollector,
@@ -89,6 +92,14 @@ CLI_PLAYERS = [
         + "levels deep evaluating leafs with hand-crafted value function. "
         + "Params are DEPTH, PRUNNING",
         AlphaBetaPlayer,
+    ),
+    CliPlayer(
+        "MM",
+        "MinimaxPlayer",
+        "Implements alpha-beta algorithm. That is, looks ahead a couple "
+        + "levels deep evaluating leafs with hand-crafted value function. "
+        + "Params are DEPTH, PRUNNING",
+        MinimaxPlayer,
     ),
 ]
 

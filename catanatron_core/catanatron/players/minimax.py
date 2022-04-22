@@ -1,3 +1,5 @@
+from cmath import inf
+from time import sleep, time
 from catanatron import Player, state
 from catanatron_experimental.cli.cli_players import register_player
 from catanatron.models.player import SimplePlayer, Color
@@ -55,43 +57,43 @@ class FooPlayer(Player):
         # ===== YOUR CODE HERE =====
         # As an example we simply return the first action:
 
-        depth = 1
         scores = {}
-        for action in game.state.playable_actions:
-            print(game.state.playable_actions)
+        #print(game.state.color_to_index)
+        for action in playable_actions[:2:]:
             s = self.successorFunc(game, action)
-            scores[action] = self.min_value(s, depth, s.state.playable_actions)
-            print(scores)
-        return max(scores, key=scores.get)
+            scores[action] = self.min_value(s, 1, s.state.playable_actions)
 
-    def min_value(self, game, depth, playable_actions):
-        #leader_actions = self.most_points(game)
+        print(max(scores, key=scores.get))
+        return max(scores, key=scores.get)
+        
+    def min_value(self, g, depth, pa):
+        game = g.copy()
         if len(game.state.playable_actions) == 0:
             print('No actions')
-            #print(self.value_function(game))
             return(self.value_function(game))
-        min_score = 100000
+        min_score = inf
         if game.state.current_color() == self.color:
-            #print('Always')
             scores = [min_score]
             for action in game.state.playable_actions:
-                #print('min calling max')
-                scores.append(self.max_value(self.successorFunc(game, action), depth, playable_actions))
+                scores.append(self.max_value(self.successorFunc(game, action), depth, pa))
                 min_score = min(scores)
         else: 
-            print('Never')
+            #print(game.state.current_color())
+            #print(game.state.playable_actions)
             scores = [min_score]
             for action in game.state.playable_actions:
-                #print('min calling min')
-                scores.append(self.min_value(self.successorFunc(game, action), depth, playable_actions))
+                scores.append(self.min_value(self.successorFunc(game, action), depth, pa))
+                #print(scores)
                 min_score = min(scores)
+        print('returning min')
         return min_score
 
-    def max_value(self, game, depth, playable_actions):
-        #pacman_actions = gameState.getLegalActions(0)
-        #print('IN MAX')
+    def max_value(self, g, depth, playable_actions):
+        game = g.copy()
+
+        #print(depth)
         if depth == 2 or len(game.state.playable_actions) == 0:
-            #print('IN IF')
+            print('return vf max')
             return(self.value_function(game))
         scores = []
         for action in game.state.playable_actions:
@@ -99,6 +101,8 @@ class FooPlayer(Player):
             scores.append(self.min_value(self.successorFunc(game, action), depth + 1, playable_actions))
         
         best_score = max(scores)
+        print('returning max')
+
         return best_score
 
     def successorFunc(self, game, action):
@@ -195,7 +199,7 @@ class FooPlayer(Player):
     def value_function(self, game):
         value_fn = self.base_fn()
         value = value_fn(game, self.color)
-        print(value)
+        #print(value)
         return value
 
     def most_points(self, game):
