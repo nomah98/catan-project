@@ -75,14 +75,14 @@ class FooPlayer(Player):
         if game.state.current_color() == self.color:
             scores = [min_score]
             for action in game.state.playable_actions:
-                scores.append(self.max_value(self.successorFunc(game, action), depth, pa))
+                scores.append(self.max_value(self.successorFunc(game, action), depth, game.state.playable_actions))
                 min_score = min(scores)
         else: 
             #print(game.state.current_color())
             #print(game.state.playable_actions)
             scores = [min_score]
             for action in game.state.playable_actions:
-                scores.append(self.min_value(self.successorFunc(game, action), depth, pa))
+                scores.append(self.min_value(self.successorFunc(game, action), depth, game.state.playable_actions))
                 #print(scores)
                 min_score = min(scores)
         print('returning min')
