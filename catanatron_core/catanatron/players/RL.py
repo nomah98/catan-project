@@ -17,10 +17,9 @@ from catanatron_experimental.machine_learning.board_tensor_features import (
     create_board_tensor,
 )
 
-# from catanatron_experimental.rep_b_model import build_model
 
-# Taken from correlation analysis
-from catanatron_experimental.catanatron_experimental.machine_learning.players.reinforcement import hot_one_encode_action
+
+# from catanatron_experimental.rep_b_model import build_model
 
 FEATURES = [
     "P0_HAS_ROAD",
@@ -88,6 +87,7 @@ class QRLPlayer(Player):
         global Q_MODEL
         Q_MODEL = keras.models.load_model(model_path)
 
+
     def decide(self, game, playable_actions):
         if len(playable_actions) == 1:
             return playable_actions[0]
@@ -100,11 +100,33 @@ class QRLPlayer(Player):
         state = create_sample_vector(game, self.color, FEATURES)
         samples = []
         for action in playable_actions:
-            samples.append(np.concatenate((state, hot_one_encode_action(action))))
+            samples.append(np.concatenate((state, self.hot_one_encode_action(action))))
         X = np.array(samples)
 
         # Predict on all samples
         result = Q_MODEL.predict(X)
         index = np.argmax(result)
         return playable_actions[index]
+
+    def hot_one_encode_action(self,action):
+        normalized = self.normalize_action(action)
+        index = ACTIONS_ARRAY.index((normalized.action_type, normalized.value))
+        vector = np.zeros(ACTION_SPACE_SIZE, dtype=int)
+        vector[index] = 1
+        return vector
+
+    def normalize_action(self, action):
+        normalized = action
+        if normalized.action_type == ActionType.ROLL:
+            return Action(action.color, action.action_type, None)
+        elif normalized.action_type == ActionType.MOVE_ROBBER:
+            return Action(action.color, action.action_type, action.value[0])
+        elif normalized.action_type == ActionType.BUILD_ROAD:
+            return Action(action.color, action.action_type, tuple(sorted(action.value)))
+        elif normalized.action_type == ActionType.BUY_DEVELOPMENT_CARD:
+            return Action(action.color, action.action_type, None)
+        elif normalized.action_type == ActionType.DISCARD:
+            return Action(action.color, action.action_type, None)
+
+        return normalized
 

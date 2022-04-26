@@ -1,12 +1,14 @@
 from collections import namedtuple
-from catanatron.players.minimax2 import MinimaxPlayer
-
 from rich.table import Table
 
 from catanatron.models.player import RandomPlayer
 from catanatron.players.weighted_random import WeightedRandomPlayer
 from catanatron.players.minimax2 import MinimaxPlayer
 from catanatron.players.ab_player import AlphaBetaPlayer
+from catanatron.players.rl import QRLPlayer
+
+
+
 
 
 # from catanatron_experimental.mcts_score_collector import (
@@ -100,6 +102,12 @@ CLI_PLAYERS = [
         "Implements our minimax algorithm. That is, looks ahead 2 moves "
         + "levels deep evaluating leafs with catanatron's value function ",
         MinimaxPlayer,
+    ),
+    CliPlayer(
+        "QRL",
+        "QRLPlayer",
+        "Implements our QRL algorithm. ",
+        QRLPlayer,
     ),
 
 ]
