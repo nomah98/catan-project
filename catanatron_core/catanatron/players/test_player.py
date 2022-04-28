@@ -7,6 +7,7 @@ from catanatron.models.player import SimplePlayer, Color
 
 @register_player("FOO")
 class FooPlayer(Player):
+    
   def decide(self, game, playable_actions):
     """Should return one of the playable_actions.
 

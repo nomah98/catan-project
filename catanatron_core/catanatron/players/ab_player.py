@@ -228,6 +228,9 @@ class AlphaBetaPlayer(Player):
         b = inf
         if len(list_prunned_actions(game)) == 1:
             return list_prunned_actions(game)[0]
+        elif len(list_prunned_actions(game)) > 10:
+            return list_prunned_actions(game)[0]
+            
 
         for action in list_prunned_actions(game):
             s = self.successorFunc(game, action)
@@ -241,11 +244,11 @@ class AlphaBetaPlayer(Player):
         return max(scores, key=scores.get)
         
     def min_value(self, game, depth, a, b): 
-        '''
+        
         if len(game.state.playable_actions) == 0:
             print('No actions')
             return(self.value_function(game))
-        '''
+        
         v = inf
         scores = [v]
         # v2 = 100
@@ -272,7 +275,7 @@ class AlphaBetaPlayer(Player):
 
     def max_value(self, game, depth, a, b):
         #print(depth)
-        if depth == 2 or len(list_prunned_actions(game)) == 0:
+        if depth == 1 or len(list_prunned_actions(game)) == 0:
             #print('return vf max')
             return(self.value_function(game))
         v = -inf
