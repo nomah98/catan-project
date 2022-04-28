@@ -66,7 +66,7 @@ class FooPlayer(Player):
         print(max(scores, key=scores.get))
         return max(scores, key=scores.get)
         
-    def min_value(self, g, depth, pa):
+    def min_value(self, g, depth):
         game = g.copy()
         if len(game.state.playable_actions) == 0:
             print('No actions')
@@ -75,20 +75,20 @@ class FooPlayer(Player):
         if game.state.current_color() == self.color:
             scores = [min_score]
             for action in game.state.playable_actions:
-                scores.append(self.max_value(self.successorFunc(game, action), depth, game.state.playable_actions))
+                scores.append(self.max_value(self.successorFunc(game, action), depth))
                 min_score = min(scores)
         else: 
             #print(game.state.current_color())
             #print(game.state.playable_actions)
             scores = [min_score]
             for action in game.state.playable_actions:
-                scores.append(self.min_value(self.successorFunc(game, action), depth, game.state.playable_actions))
+                scores.append(self.min_value(self.successorFunc(game, action), depth))
                 #print(scores)
                 min_score = min(scores)
         print('returning min')
         return min_score
 
-    def max_value(self, g, depth, playable_actions):
+    def max_value(self, g, depth):
         game = g.copy()
 
         #print(depth)
@@ -98,7 +98,7 @@ class FooPlayer(Player):
         scores = []
         for action in game.state.playable_actions:
             #print('max calling min')
-            scores.append(self.min_value(self.successorFunc(game, action), depth + 1, playable_actions))
+            scores.append(self.min_value(self.successorFunc(game, action), depth + 1, game.state.playable_actions))
         
         best_score = max(scores)
         print('returning max')

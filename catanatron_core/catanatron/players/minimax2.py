@@ -224,7 +224,6 @@ class MinimaxPlayer(Player):
 
     def decide(self, game, playable_actions):
         scores = {}
-        #print(game.state.color_to_index)
         for action in list_prunned_actions(game):
             s = self.successorFunc(game, action)
             scores[action] = self.min_value(s, 1, list_prunned_actions(s))
@@ -240,29 +239,23 @@ class MinimaxPlayer(Player):
         if game.state.current_color() == self.color:
             scores = [min_score]
             for action in list_prunned_actions(game):
-                scores.append(self.max_value(self.successorFunc(game, action), depth, list_prunned_actions(game)))
+                scores.append(self.max_value(self.successorFunc(game, action), depth + 1, list_prunned_actions(game)))
                 min_score = min(scores)
         else: 
             scores = [min_score]
             for action in list_prunned_actions(game):
-                scores.append(self.min_value(self.successorFunc(game, action), depth, list_prunned_actions(game) ))
-                #print(scores)
+                scores.append(self.min_value(self.successorFunc(game, action), depth + 1, list_prunned_actions(game) ))
                 min_score = min(scores)
-        #print('returning min')
         return min_score
 
     def max_value(self, game, depth, playable_actions):
-        #print(depth)
-        if depth == 1 or len(list_prunned_actions(game)) == 0:
-            #print('return vf max')
+        if depth >= 2 or len(list_prunned_actions(game)) == 0:
             return(self.value_function(game))
         scores = []
         for action in list_prunned_actions(game):
-            #print('max calling min')
             scores.append(self.min_value(self.successorFunc(game, action), depth + 1, list_prunned_actions(game)))
         
         best_score = max(scores)
-        #print('returning max')
         return best_score
 
     def successorFunc(self, game, action):

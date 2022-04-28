@@ -260,28 +260,22 @@ class AlphaBetaPlayer(Player):
                 if v2 < a:
                     return v2
                 b = min(b, v2)
-                #print(v2)
 
         else: 
             for action in list_prunned_actions(game):
                 scores.append(self.min_value(self.successorFunc(game, action), depth, a, b))
-                #print(scores)
                 v2 = min(scores)
                 if v2 < a:
                     return v2
                 b = min(b, v2)
-                #print(v2)
         return v2
 
     def max_value(self, game, depth, a, b):
-        #print(depth)
-        if depth == 1 or len(list_prunned_actions(game)) == 0:
-            #print('return vf max')
+        if depth >= 2 or len(list_prunned_actions(game)) == 0:
             return(self.value_function(game))
         v = -inf
 
         for action in list_prunned_actions(game):
-            #print('max calling min')
             v3 = self.min_value(self.successorFunc(game, action), depth + 1, a, b)
             if v3 > v:
                 v = v3
