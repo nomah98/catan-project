@@ -209,12 +209,7 @@ MAX_SEARCH_TIME_SECS = 20
 
 class MinimaxPlayer(Player):
     """
-    Player that executes an AlphaBeta Search where the value of each node
-    is taken to be the expected value (using the probability of rolls, etc...)
-    of its children. At leafs we simply use the heuristic function given.
-
-    NOTE: More than 3 levels seems to take much longer, it would be
-    interesting to see this with prunning.
+    Player that executes an Minimax Search 
     """
 
 

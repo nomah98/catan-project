@@ -228,8 +228,6 @@ class AlphaBetaPlayer(Player):
         b = inf
         if len(list_prunned_actions(game)) == 1:
             return list_prunned_actions(game)[0]
-        elif len(list_prunned_actions(game)) > 10:
-            return list_prunned_actions(game)[0]
             
 
         for action in list_prunned_actions(game):
@@ -255,7 +253,7 @@ class AlphaBetaPlayer(Player):
         if game.state.current_color() == self.color:
             
             for action in list_prunned_actions(game):
-                scores.append(self.max_value(self.successorFunc(game, action), depth, a, b))
+                scores.append(self.max_value(self.successorFunc(game, action), depth + 1, a, b))
                 v2 = min(scores)
                 if v2 < a:
                     return v2
@@ -263,7 +261,7 @@ class AlphaBetaPlayer(Player):
 
         else: 
             for action in list_prunned_actions(game):
-                scores.append(self.min_value(self.successorFunc(game, action), depth, a, b))
+                scores.append(self.min_value(self.successorFunc(game, action), depth + 1, a, b))
                 v2 = min(scores)
                 if v2 < a:
                     return v2
