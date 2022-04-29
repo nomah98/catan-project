@@ -5,7 +5,7 @@ from catanatron.models.player import RandomPlayer
 from catanatron.players.weighted_random import WeightedRandomPlayer
 from catanatron.players.minimax2 import MinimaxPlayer
 from catanatron.players.ab_player import AlphaBetaPlayer
-from catanatron.players.rl import QRLPlayer
+from catanatron.players.RL import QRLPlayer
 
 
 
