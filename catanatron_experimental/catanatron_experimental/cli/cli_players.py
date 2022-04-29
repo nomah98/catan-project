@@ -1,11 +1,14 @@
 from collections import namedtuple
-from catanatron.players.minimax2 import MinimaxPlayer
-
 from rich.table import Table
 
 from catanatron.models.player import RandomPlayer
 from catanatron.players.weighted_random import WeightedRandomPlayer
 from catanatron.players.minimax2 import MinimaxPlayer
+from catanatron.players.ab_player import AlphaBetaPlayer
+from catanatron.players.rl import QRLPlayer
+
+
+
 
 
 # from catanatron_experimental.mcts_score_collector import (
@@ -19,7 +22,7 @@ from catanatron.players.minimax2 import MinimaxPlayer
 #     PRLPlayer,
 # )
 from catanatron_experimental.machine_learning.players.minimax import (
-    AlphaBetaPlayer,
+    
     ValueFunctionPlayer,
 )
 from catanatron.players.search import (
@@ -96,11 +99,17 @@ CLI_PLAYERS = [
     CliPlayer(
         "MM",
         "MinimaxPlayer",
-        "Implements alpha-beta algorithm. That is, looks ahead a couple "
-        + "levels deep evaluating leafs with hand-crafted value function. "
-        + "Params are DEPTH, PRUNNING",
+        "Implements our minimax algorithm. That is, looks ahead 2 moves "
+        + "levels deep evaluating leafs with catanatron's value function ",
         MinimaxPlayer,
     ),
+    CliPlayer(
+        "QRL",
+        "QRLPlayer",
+        "Implements our QRL algorithm. ",
+        QRLPlayer,
+    ),
+
 ]
 
 

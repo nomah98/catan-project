@@ -100,7 +100,7 @@ class ValueFunctionPlayer(Player):
 
         return best_action
 
-    def __str__(self):
+    def __str__(self): 
         return super().__str__() + f"(value_fn={self.value_fn_builder_name})"
 
 
@@ -295,6 +295,8 @@ class AlphaBetaPlayer(Player):
         action_outcomes = expand_spectrum(game, actions)  # action => (game, proba)[]
 
         if maximizingPlayer:
+            #print("JEAH")
+
             best_action = None
             best_value = float("-inf")
             for i, (action, outcomes) in enumerate(action_outcomes.items()):
@@ -328,6 +330,7 @@ class AlphaBetaPlayer(Player):
             node.expected_value = best_value
             return best_action, best_value
         else:
+            #print("NOT")
             best_action = None
             best_value = float("inf")
             for i, (action, outcomes) in enumerate(action_outcomes.items()):

@@ -207,9 +207,14 @@ ALPHABETA_DEFAULT_DEPTH = 2
 MAX_SEARCH_TIME_SECS = 20
 
 
-class MinimaxPlayer(Player):
+class AlphaBetaPlayer(Player):
     """
-    Player that executes an Minimax Search 
+    Player that executes an AlphaBeta Search where the value of each node
+    is taken to be the expected value (using the probability of rolls, etc...)
+    of its children. At leafs we simply use the heuristic function given.
+
+    NOTE: More than 3 levels seems to take much longer, it would be
+    interesting to see this with prunning.
     """
 
 
@@ -219,37 +224,65 @@ class MinimaxPlayer(Player):
 
     def decide(self, game, playable_actions):
         scores = {}
+        a = -inf
+        b = inf
+        if len(list_prunned_actions(game)) == 1:
+            return list_prunned_actions(game)[0]
+            
+
         for action in list_prunned_actions(game):
             s = self.successorFunc(game, action)
-            scores[action] = self.min_value(s, 1, list_prunned_actions(s))
+            scores[action] = self.min_value(s, 1, a, b)
+
+            if scores[action] > b:
+                return action
+            a = max(scores[action], a)
+
+        print('decided: ' + str(max(scores, key=scores.get)))
         return max(scores, key=scores.get)
         
-    def min_value(self, game, depth, pa): 
+    def min_value(self, game, depth, a, b): 
+        
         if len(game.state.playable_actions) == 0:
             print('No actions')
             return(self.value_function(game))
-        min_score = inf
+        
+        v = inf
+        scores = [v]
+        # v2 = 100
         if game.state.current_color() == self.color:
-            scores = [min_score]
+            
             for action in list_prunned_actions(game):
-                scores.append(self.max_value(self.successorFunc(game, action), depth + 1, list_prunned_actions(game)))
-                min_score = min(scores)
-        else: 
-            scores = [min_score]
-            for action in list_prunned_actions(game):
-                scores.append(self.min_value(self.successorFunc(game, action), depth + 1, list_prunned_actions(game) ))
-                min_score = min(scores)
-        return min_score
+                scores.append(self.max_value(self.successorFunc(game, action), depth + 1, a, b))
+                v2 = min(scores)
+                if v2 < a:
+                    return v2
+                b = min(b, v2)
 
-    def max_value(self, game, depth, playable_actions):
+        else: 
+            for action in list_prunned_actions(game):
+                scores.append(self.min_value(self.successorFunc(game, action), depth + 1, a, b))
+                v2 = min(scores)
+                if v2 < a:
+                    return v2
+                b = min(b, v2)
+        return v2
+
+    def max_value(self, game, depth, a, b):
         if depth >= 2 or len(list_prunned_actions(game)) == 0:
             return(self.value_function(game))
-        scores = []
+        v = -inf
+
         for action in list_prunned_actions(game):
-            scores.append(self.min_value(self.successorFunc(game, action), depth + 1, list_prunned_actions(game)))
+            v3 = self.min_value(self.successorFunc(game, action), depth + 1, a, b)
+            if v3 > v:
+                v = v3
+            
+            if v > b:
+                return v
+            a = max(a, v)
+        return v
         
-        best_score = max(scores)
-        return best_score
 
     def successorFunc(self, game, action):
             temp = game.copy()
