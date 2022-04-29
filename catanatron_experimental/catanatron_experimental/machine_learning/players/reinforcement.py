@@ -132,7 +132,7 @@ def normalize_action(action):
 
 
 class PRLPlayer(Player):
-    def __init__(self, color, model_path):
+    def __init__(self, color,  model_path):
         super(PRLPlayer, self).__init__(color)
         global P_MODEL
         P_MODEL = keras.models.load_model(model_path)

@@ -114,6 +114,8 @@ class CatanatronEnv(gym.Env):
     def __init__(self, config=None):
         pass
 
+    def get_playable_actions(self):
+        return self.game.state.playable_actions
     def get_valid_actions(self):
         """
         Returns:
