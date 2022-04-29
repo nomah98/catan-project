@@ -150,6 +150,7 @@ class RLPlayer(Player):
     Q_MODEL = tf.keras.models.load_model("data/models/DQN - 1651202649.4990249")
 
     def decide(self, game, playable_actions):
+        # If there is only one action to play, play it
         if len(playable_actions) == 1:
             return playable_actions[0]
 
@@ -164,8 +165,11 @@ class RLPlayer(Player):
 
 
 def epsilon_greedy_policy(playable_actions, qs, epsilon):
-    if np.random.random() > epsilon:
-        # Create array like [0,0,1,0,0,0,1,...] representing actions in space that are playable
+    if np.random.random() <= epsilon:
+        index = random.randrange(0, len(playable_actions))
+        best_action = playable_actions[index]
+        best_action_int = to_action_space(best_action)
+    else:
         action_ints = list(map(to_action_space, playable_actions))
         mask = np.zeros(ACTION_SPACE_SIZE, dtype=np.int)
         mask[action_ints] = 1
@@ -174,11 +178,6 @@ def epsilon_greedy_policy(playable_actions, qs, epsilon):
         clipped_probas[clipped_probas == 0] = -np.inf
 
         best_action_int = np.argmax(clipped_probas)
-    else:
-        # Get random action
-        index = random.randrange(0, len(playable_actions))
-        best_action = playable_actions[index]
-        best_action_int = to_action_space(best_action)
 
     return best_action_int
 
