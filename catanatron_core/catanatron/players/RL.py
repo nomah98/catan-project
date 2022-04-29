@@ -149,6 +149,7 @@ class RLPlayer(Player):
     # Q_MODEL = DQN().create_model()
     Q_MODEL = tf.keras.models.load_model("data/models/DQN - 1651202649.4990249")
 
+
     def decide(self, game, playable_actions):
         # If there is only one action to play, play it
         if len(playable_actions) == 1:
